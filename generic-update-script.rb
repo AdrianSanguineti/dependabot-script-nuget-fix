@@ -18,6 +18,16 @@ credentials = [
   }
 ]
 
+# Like the Azure DevOps Dependabot extension, we need to support additional credentials. We define and add 
+# the same DEPENDABOT_EXTRA_CREDENTIALS environment variable:
+#   https://github.com/tinglesoftware/dependabot-azure-devops/blob/main/src/script/update-script.rb
+unless ENV["DEPENDABOT_EXTRA_CREDENTIALS"].to_s.strip.empty?
+  # For example:
+  # "[{\"type\":\"npm_registry\",\"registry\":\
+  #     "registry.npmjs.org\",\"token\":\"123\"}]"
+  credentials.concat(JSON.parse(ENV["DEPENDABOT_EXTRA_CREDENTIALS"]))
+end
+
 # Full name of the repo you want to create pull requests for.
 repo_name = ENV["PROJECT_PATH"] # namespace/project
 
